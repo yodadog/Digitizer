@@ -11,8 +11,8 @@ using namespace std;
 using namespace cv;
 
 int main() {
-	CvMLData data;
-	data.read_csv("../training_data/train.csv");
+	CvMLData data; //csv data object
+	data.read_csv("./training_data/train.csv");
 	Mat x = Mat::zeros(28,28,CV_8UC1); // 28x28 Matrix 8bits, single channel
 
 	cout << x << endl;
