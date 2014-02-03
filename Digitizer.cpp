@@ -23,7 +23,7 @@ int main() {
 	for(int i = 1; i < digit_data->rows; i++) {
 		for(int j = 0; j < digit_data->cols; j++)
 			cout << CV_MAT_ELEM(*digit_data, float, i, j) << " ";
-		;;//cout << endl;
+		cout << endl;
 	}
 
 	return 0;
