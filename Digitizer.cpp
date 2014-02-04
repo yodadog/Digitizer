@@ -15,16 +15,13 @@ int main() {
 	CvMLData data; //csv data object
 	data.read_csv("./training_data/train.csv");
 	data.set_response_idx(0);
-	const CvMat* digit_data = data.get_values();
-	Mat x = Mat::zeros(28,28,CV_8UC1); // 28x28 Matrix 8bits, single channel
-	cout << "Rows: " << digit_data->rows << " Cols: " << digit_data->cols << endl;
+	Mat x; //Matrix to hold all the digit data
+	x=data.get_values();
+	cout << "Rows: " << x.rows << " Cols: " << x.cols << endl;
 
-	//using row 1 to skip the label row
-	for(int i = 1; i < digit_data->rows; i++) {
-		for(int j = 0; j < digit_data->cols; j++)
-			cout << CV_MAT_ELEM(*digit_data, float, i, j) << " ";
-		cout << endl;
-	}
-
+	/* //show csv data
+	cout << x;
+	cout << endl;
+	*/
 	return 0;
 }
