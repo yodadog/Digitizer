@@ -19,6 +19,8 @@ int main() {
 	x=data.get_values();
 	cout << "Rows: " << x.rows << " Cols: " << x.cols << endl;
 
+	IplImage * img = cvCreateImage(Size(28,28),IPL_DEPTH_32F, 1);
+
 	/* //show csv data
 	cout << x;
 	cout << endl;
