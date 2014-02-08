@@ -17,7 +17,9 @@ int main() {
 	data.set_response_idx(0);
 	
 	//Matrix to hold all the digit data
-	Mat x=data.get_values();
+	Mat converted=data.get_values();
+	Mat x;
+	converted.convertTo(x,CV_8UC1);
 	cout << "Rows: " << x.rows << " Cols: " << x.cols << endl;
 	
 	//print_images(1,100,x);	
@@ -31,11 +33,10 @@ int main() {
 		Mat image;
 		for (int j=0; j < 28; j++) {
 		    temp.push_back(x.rowRange(3,4).colRange(j*28,((j+1)*28)-1));
-		    cout << x.rowRange(3,4).colRange(j*28,((j+1)*28)-1) << endl;
 		}
 		cout << temp << endl;
-		//cvtColor(temp,image,CV_RGB2GRAY);
-		findContours(temp,v,CV_RETR_LIST,CV_CHAIN_APPROX_SIMPLE);
+		
+		findContours(temp,v,CV_RETR_LIST,CV_CHAIN_APPROX_NONE);
 		unsigned int area =0;
 		int idx;
 		for (unsigned int j=0; j < v.size();j++) {
@@ -45,7 +46,7 @@ int main() {
 			}
 		}
 		//Calc bounding rect of largest area
-		Rect rect = boundingRect(v[idx]);
+		Rect rect = boundingRect(Mat(v[idx]));
 		Point p1,p2;
 		p1.x=rect.x;
 		p1.y=rect.y;
@@ -73,3 +74,6 @@ void print_images(int rowstart, int rowend, Mat x){
 		for (int j =0; j < 784; j+=28)
 			cout << x(Range(i,i+1),Range(j,j+28)) << endl;	
 }
+
+
+
