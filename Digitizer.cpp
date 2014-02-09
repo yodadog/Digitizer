@@ -9,10 +9,16 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv/cv.h>
 #include <opencv/ml.h>
+#include <cstdlib>
 
 using namespace std;
 using namespace cv;
-RNG rng(31337);
+RNG rng(31337); // RNG seed set
+
+/* Magic Constant DEFINES */
+#define PIX_DIM 28		//image pixel size= 28x28
+
+
 void print_images(int rowstart, int rowend, Mat x);
 int main() {
     CvMLData data; 					//csv data object
@@ -32,11 +38,14 @@ int main() {
     int i=1;
     {
 	vector<vector<Point> > v; //DA VECTORZ OF VECTORZ
-	Mat temp(0,28,CV_8UC1);
-	for (int j=0; j < 28; j++) {
-	    temp.push_back(x.rowRange(i,i+1).colRange(j*28,((j+1)*28)));
+	Mat temp(0,PIX_DIM,CV_8UC1);
+	for (int j=0; j < PIX_DIM; j++) {
+	    temp.push_back(x.rowRange(i,i+1).colRange(j*PIX_DIM,((j+1)*PIX_DIM)));
 	}
 
+	//findContours changes temp so save actual number here
+	cout <<temp << endl;
+	//possibly try CV_CHAIN_APPROX_SIMPLE
 	findContours(temp,v,CV_RETR_LIST,CV_CHAIN_APPROX_NONE);
 	vector<vector<Point> > contours_poly( v.size() );
 	vector<Rect> boundRect(v.size());
@@ -45,16 +54,21 @@ int main() {
 	    boundRect[j] = boundingRect( Mat(contours_poly[j]) );
 	}
 
-	/*//Drawing image to a window
-	Mat drawing = Mat::zeros(28,28,CV_8UC3);
+	/*
+	//Drawing image to a window
+	Mat drawing = Mat::zeros(PIX_DIM,PIX_DIM,CV_8UC3);
+	char file[4];
 	for (unsigned int j=0; j < v.size(); j++) {
 	    Scalar color = Scalar( rng.uniform(0,255), rng.uniform(0,255), rng.uniform(0,255) );
 	    drawContours(drawing, contours_poly, j , color);
-	    rectangle(drawing, boundRect[j].tl(),boundRect[j].br(),color,2,8,0);
+	    rectangle(drawing, boundRect[j].tl(),boundRect[j].br(),color,1,4,0);
 	}
+	print_images(i,i+1,x);
 
-	namedWindow("Contours",CV_WINDOW_NORMAL);
-	imshow("Contours",drawing);
+	sprintf(file,"%d",i);
+	namedWindow(file,CV_WINDOW_NORMAL);
+	imshow(file,drawing);
+	cout << "V.SIZE(): " << v.size() << endl;
 	*/
 
     }
@@ -66,7 +80,7 @@ int main() {
 }
 
 //prints specified amount of images
-//in 28x28 form
+//in form PIX_DIM x PIX_DIM
 void print_images(int rowstart, int rowend, Mat x){
     if (rowstart == rowend)
 	rowend++;
@@ -75,8 +89,8 @@ void print_images(int rowstart, int rowend, Mat x){
     if (rowend > x.rows)
 	rowend = x.rows;
     for (int i=rowstart; i < rowend; i++)
-	for (int j =0; j < 784; j+=28)
-	    cout << x(Range(i,i+1),Range(j,j+28)) << endl;	
+	for (int j =0; j < pow(PIX_DIM,2); j+=PIX_DIM)
+	    cout << x(Range(i,i+1),Range(j,j+PIX_DIM)) << endl;	
 }
 
 
