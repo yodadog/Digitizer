@@ -44,7 +44,9 @@ int main() {
 	}
 
 	//findContours changes temp so save actual number here
-	cout <<temp << endl;
+	int trainer = temp.at<int>(0,0);
+	//cout <<temp << endl;
+	//cout << trainer << endl;
 	//possibly try CV_CHAIN_APPROX_SIMPLE
 	findContours(temp,v,CV_RETR_LIST,CV_CHAIN_APPROX_NONE);
 	vector<vector<Point> > contours_poly( v.size() );
