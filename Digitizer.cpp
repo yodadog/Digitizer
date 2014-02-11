@@ -39,6 +39,8 @@ int main() {
     {
 	vector<vector<Point> > v; //DA VECTORZ OF VECTORZ
 	Mat temp(0,PIX_DIM,CV_8UC1);
+	Mat trainClass;
+	const int K = 32;
 	for (int j=0; j < PIX_DIM; j++) {
 	    temp.push_back(x.rowRange(i,i+1).colRange(j*PIX_DIM,((j+1)*PIX_DIM)));
 	}
@@ -55,6 +57,7 @@ int main() {
 	    approxPolyDP( Mat(v[j]),contours_poly[j],3,true );
 	    boundRect[j] = boundingRect( Mat(contours_poly[j]) );
 	}
+	KNearest knn(temp,trainClass, x, false, K);
 
 	/*
 	//Drawing image to a window
