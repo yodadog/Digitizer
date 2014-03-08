@@ -5,6 +5,7 @@
  */
 
 #include <iostream>
+#include <fstream>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -42,7 +43,7 @@ int main() {
     for(int i=1; i < x.rows;i++)
     {
 	Mat tmp = Mat::zeros(1,NUMBER_OF_CLASSES,CV_32FC1);
-	tmp.at<float>(0,x.at<float>(i,0))=1.0;
+	tmp.at<float>(0,x.at<float>(i,0))= 1.0;
 	training_class.push_back(tmp);
     }
     /*****************************************************/
@@ -80,7 +81,7 @@ int main() {
     					//stop training after 10000 iterations
 					//or small change
     CvANN_MLP_TrainParams PARAMZ(cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,
-						1000,0.000001),
+						5000,0.000001),
 	    			 CvANN_MLP_TrainParams::BACKPROP, 
 				 //coefficients for training
 				 0.1,0.1);
@@ -100,6 +101,9 @@ int main() {
     int false_detection[NUMBER_OF_CLASSES] ={0,0,0,0,0,0,0,0,0,0};
     Point Max;
     cout << "Predicting....\n";
+    ofstream fout;
+    fout.open("classified.csv");
+    fout << "ImageId,Label\n";
 
     for(int i=0; i < testing_data.rows; i++) {
 	tester = testing_data.row(i);
@@ -114,7 +118,9 @@ int main() {
 	}
 	else
 	    correct++;
+	fout << i+1 <<"," << Max.x << endl;
     }
+    fout.close();
 
     cout << "RESULTS\n";
     cout << "--------------------------------\n";
