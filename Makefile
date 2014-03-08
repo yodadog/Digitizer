@@ -1,18 +1,13 @@
 CC              = g++
-CFLAGS          = -g -c -Wall -I /usr/local/include/opencv
+CFLAGS          = -g -Wall -I /usr/local/include/opencv
 LDFLAGS         = -lpthread -pthread `pkg-config --cflags --libs opencv` 
-SOURCES         = Digitizer.cpp
+SOURCES         = ${TARGET:=.cpp} 
 INCLUDES        = 
-OBJECTS         = $(SOURCES:.cpp=.o)
-TARGET          = Digitizer
+TARGET          = Digitizer NeuralNet
 
-all: $(SOURCES) $(TARGET)
+all: $(TARGET)
 
-$(TARGET): $(OBJECTS)
-	        $(CC) $(LDFLAGS) $(OBJECTS) -o $@
-
-.cpp.o:
-	        $(CC) $(CFLAGS) $(INCLUDES) $< -o $@
-
+$(TARGET): $(SOURCES)
+	        $(CC) $(CFLAGS) $(OBJECTS) $@.cpp -o $@ $(LDFLAGS)
 clean:
 	        rm -rf $(OBJECTS) $(TARGET)
